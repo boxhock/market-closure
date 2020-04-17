@@ -2,6 +2,12 @@
 
 This repo helps with checking if a market is currently closed according to a predefined schedule. 
 
+## Install
+
+```bash
+yarn add market-closure
+```
+
 ## Usage
 
 ```javascript
