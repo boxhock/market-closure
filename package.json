@@ -1,0 +1,17 @@
+{
+  "name": "market-closure",
+  "version": "0.1.0",
+  "description": "Helpers for getting market closure status",
+  "main": "index.js",
+  "repository": "https://github.com/boxhock/market-closure.git",
+  "author": "Jonas Hals <jonas@smartcontract.com>",
+  "license": "MIT",
+  "private": false,
+  "dependencies": {
+    "luxon": "^1.23.0"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^7.1.1"
+  }
+}
