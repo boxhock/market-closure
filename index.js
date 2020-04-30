@@ -8,7 +8,7 @@ class MarketClosure {
     // Holidays is an array of holidays where the market is closed. See checkIfInHolidays() for more information.
     constructor(schedule) {
         this.timezone = schedule.timezone || ""
-        this.hours = schedule.hours || null
+        this.hours = schedule.hours || {}
         this.holidays = schedule.holidays || []
     }
 
@@ -60,9 +60,10 @@ class MarketClosure {
     //   tuesday: ["08:00-12:00", "13:00-16:00"]
     // }
     // If a day is not included, then the entire day is considered closed.
+    // If no days are provided, all days are considered open.
     isInTradingHours = (t) => {
-        if (this.hours === null)
-            return false
+        if (this.hours === null || Object.keys(this.hours).length < 1)
+            return true
 
         const weekday = t.weekdayLong.toLowerCase()
 
