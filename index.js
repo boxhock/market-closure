@@ -13,18 +13,8 @@ class MarketClosure {
     }
 
     // tradingHalted() returns true if the current time in the defined timezone is within a defined holiday
-    // or if the time is not currently in one of the defined trading hours (if any are defined).
-    tradingHalted = () => {
-        if (this.timezone === "")
-            return false
-
-        const curTime = DateTime.local().setZone(this.timezone)
-
-        return !this.isInTradingHours(curTime) || this.isInHolidays(curTime)
-    }
-
     // inTimespan() checks to see if the time provided is within the timespan of format "hh:mm-hh:mm"
-    #inTimespan = (t, timespan) => {
+    static inTimespan(t, timespan) {
         const times = timespan.split('-')
 
         // Check for malformed timespan
@@ -54,14 +44,25 @@ class MarketClosure {
         return true
     }
 
+    // or if the time is not currently in one of the defined trading hours (if any are defined).
+    tradingHalted() {
+        if (this.timezone === "")
+            return false
+
+        const curTime = DateTime.local().setZone(this.timezone)
+
+        return !this.isInTradingHours(curTime) || this.isInHolidays(curTime)
+    }
+
     // Expects an object of days with an array of trading hours. Eg:
     // {
     //   monday: ["08:00-12:00", "13:00-16:00"],
     //   tuesday: ["08:00-12:00", "13:00-16:00"]
     // }
     // If a day is not included, then the entire day is considered closed.
+
     // If no days are provided, all days are considered open.
-    isInTradingHours = (t) => {
+    isInTradingHours(t) {
         if (this.hours === null || Object.keys(this.hours).length < 1)
             return true
 
@@ -74,7 +75,7 @@ class MarketClosure {
 
         for (let i = 0; i < this.hours[weekday].length; i++) {
             const timespan = this.hours[weekday][i]
-            if (this.#inTimespan(t, timespan))
+            if (MarketClosure.inTimespan(t, timespan))
                 return true
         }
 
@@ -98,7 +99,7 @@ class MarketClosure {
     // ]
     // The hours is the time the markets are closed.
     // Hours can be omitted to consider the entire day as closed.
-    isInHolidays = (t) => {
+    isInHolidays(t) {
         for (let i = 0; i < this.holidays.length; i++) {
             const day = this.holidays[i]
 
@@ -108,7 +109,7 @@ class MarketClosure {
 
             // If there are no hours assigned to this holiday, we consider the entire day off.
             // Otherwise, check if we're inside the timespan for closed hours.
-            if (typeof day.hours === "undefined" || day.hours === "" || this.#inTimespan(t, day.hours)) {
+            if (typeof day.hours === "undefined" || day.hours === "" || MarketClosure.inTimespan(t, day.hours)) {
                 return true
             }
         }
