@@ -8,7 +8,7 @@
   "license": "MIT",
   "private": false,
   "dependencies": {
-    "luxon": "^1.23.0"
+    "luxon": "^2.5.2"
   },
   "devDependencies": {
     "chai": "^4.2.0",
